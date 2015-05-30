@@ -101,7 +101,7 @@ module.exports = function(grunt) {
       msDeploy32Path = path.resolve(path.join(process.env["ProgramFiles(x86)"],relativeMsDeployPath));
       if (fs.existsSync(msDeploy32Path)) {
         grunt.log.writeln("Found 32-bit version of msdeploy");
-        return msDeploy64Path;
+        return msDeploy32Path;
       }
     }
 
