@@ -73,7 +73,7 @@ module.exports = function(grunt) {
 
     var process = spawn(command,args);
 
-    process.stdout.on('data', function(data) { grunt.log.write(data) });
+    process.stdout.on('data', function(data) { grunt.log.write(data); });
     process.stderr.on('data', function(data) { grunt.log.error(data); });
     process.on('exit', function(code) {
             if (code !== 0) {
@@ -84,14 +84,13 @@ module.exports = function(grunt) {
   });
 
   function getExePath() {
-
-    var relativeMsDeployPath = "IIS/Microsoft Web Deploy V3/msdeploy.exe";
-
-    var path64 = process.env.ProgramFiles,relativeMsDeployPath;
-    var path32 = process.env["ProgramFiles(x86)"],relativeMsDeployPath;
+    var relativeMsDeployPath = "IIS/Microsoft Web Deploy V3/msdeploy.exe",
+        path64 = path.join(process.env.ProgramFiles,relativeMsDeployPath),
+        path32 = path.join(process.env["ProgramFiles(x86)"],relativeMsDeployPath),
+        msDeploy64Path, msDeploy32Path;
 
     if (path64 != null) {
-      var msDeploy64Path = path.resolve(path.join(process.env.ProgramFiles,relativeMsDeployPath));
+      msDeploy64Path = path.resolve(path.join(process.env.ProgramFiles,relativeMsDeployPath));
       if (fs.existsSync(msDeploy64Path)) {
         grunt.log.writeln("Found 64-bit version of msdeploy");
         return msDeploy64Path;
@@ -99,17 +98,17 @@ module.exports = function(grunt) {
     }
 
     if (path32 != null) {
-      var msDeploy32Path = path.resolve(path.join(process.env["ProgramFiles(x86)"],relativeMsDeployPath));
+      msDeploy32Path = path.resolve(path.join(process.env["ProgramFiles(x86)"],relativeMsDeployPath));
       if (fs.existsSync(msDeploy32Path)) {
         grunt.log.writeln("Found 32-bit version of msdeploy");
         return msDeploy64Path;
       }
     }
 
-    throw new Error("MSDeploy doesn't seem to be installed. Could not find msdeploy in \""+msDeploy64Path+"\" or \""+msDeploy32Path+"\". You can install it from http://www.iis.net/downloads/microsoft/web-deploy")
+    throw new Error("MSDeploy doesn't seem to be installed. Could not find msdeploy in \""+msDeploy64Path+"\" or \""+msDeploy32Path+"\". You can install it from http://www.iis.net/downloads/microsoft/web-deploy");
   }
 
   function escapeShell(cmd) {
     return '"'+cmd+'"';
-  };
+  }
 };
