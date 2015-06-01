@@ -49,21 +49,33 @@ module.exports = function(grunt) {
       if(typeof obj === 'string' || obj instanceof String){
         //append string to args
         argument += obj;
+
+        //Add argument to args
+        args.push(argument);
+      }else if (obj.constructor === Array){
+        //level 2 is an array, loop over specifying the duplicate arguments.
+        for (var i = 0; i < obj.length; i++) {
+          argument = "-"+key+":";
+
+          argument += obj[i];
+
+           //Add argument to args
+          args.push(argument);
+       }
       }else{
         //level 2 is key value pair, loop through and attach
-
-        for (var prop in obj) {
-          if(obj.hasOwnProperty(prop)){
+       for (var prop in obj) {
+         if(obj.hasOwnProperty(prop)){
             var str = prop + "=" + obj[prop]+",";
             argument += (str);
           }
         }
         //Remove last comma
         argument = argument.slice(0, -1);
-      }
 
-      //Add argument to args
-      args.push(argument);
+        //Add argument to args
+        args.push(argument);
+      }
     }
 
     grunt.log.debug(args);
